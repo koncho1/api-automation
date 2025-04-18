@@ -23,57 +23,40 @@ import java.util.List;
 public class CommentsTest extends BaseTests {
     @Test
     public void getComments() throws IOException {
-        HttpClient client = HttpClients.createDefault();
-        HttpUriRequest request=new HttpGet("https://gorest.co.in/public/v2/comments");
-        String response = client.execute(request, new BasicHttpClientResponseHandler());
+        GetCommentsMethod getCommentsMethod = new GetCommentsMethod();
+        String response = getCommentsMethod.callAPI();
         List <ValidationMessage> errors= super.validatePayload(response, "getCommentsTemplate");
         Assert.assertTrue(errors.isEmpty());
     }
 
     @Test
     public void getComment() throws IOException{
-        HttpClient client = HttpClients.createDefault();
-        HttpUriRequest request=new HttpGet("https://gorest.co.in/public/v2/comments/147195");
-        String response = client.execute(request, new BasicHttpClientResponseHandler());
+        GetCommentMethod getCommentMethod = new GetCommentMethod();
+        String response = getCommentMethod.callAPI();
         List <ValidationMessage> errors= super.validatePayload(response, "getCommentTemplate");
         Assert.assertTrue(errors.isEmpty());
     }
 
     @Test
     public void postComment() throws IOException {
-        CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost("https://gorest.co.in/public/v2/comments?access-token=5d034ab1ba63642fd87b6ff1133eb5fbadad18da23c7c44bbe1f857e25b733b7");
-        List<NameValuePair> params = new ArrayList<NameValuePair>(2);
-        params.add(new BasicNameValuePair("post_id", "203766"));
-        params.add(new BasicNameValuePair("name", "John Doe"));
-        params.add(new BasicNameValuePair("email", "mail@gmail.example"));
-        params.add(new BasicNameValuePair("body", "comment"));
-        httpPost.setEntity(new UrlEncodedFormEntity(params));
-        String response = client.execute(httpPost, new BasicHttpClientResponseHandler());
+        PostCommentMethod postCommentMethod = new PostCommentMethod();
+        String response = postCommentMethod.callAPI();
         List <ValidationMessage> errors= super.validatePayload(response, "postCommentTemplate");
         Assert.assertTrue(errors.isEmpty());
     }
 
     @Test
     public void putComment() throws IOException {
-        CloseableHttpClient client = HttpClients.createDefault();
-        HttpPut httpPut = new HttpPut("https://gorest.co.in/public/v2/comments/147193?access-token=5d034ab1ba63642fd87b6ff1133eb5fbadad18da23c7c44bbe1f857e25b733b7");
-        List<NameValuePair> params = new ArrayList<NameValuePair>(2);
-        params.add(new BasicNameValuePair("post_id", "203565"));
-        params.add(new BasicNameValuePair("name", "John Doe"));
-        params.add(new BasicNameValuePair("email", "mail@gmail.example"));
-        params.add(new BasicNameValuePair("body", "comment"));
-        httpPut.setEntity(new UrlEncodedFormEntity(params));
-        String response = client.execute(httpPut, new BasicHttpClientResponseHandler());
+        PutCommentMethod putCommentMethod = new PutCommentMethod();
+        String response = putCommentMethod.callAPI();
         List <ValidationMessage> errors= super.validatePayload(response, "putCommentTemplate");
         Assert.assertTrue(errors.isEmpty());
     }
 
     @Test
     public void deleteComment() throws IOException {
-        HttpUriRequest request = new HttpDelete("https://gorest.co.in/public/v2/comments/147190?access-token=5d034ab1ba63642fd87b6ff1133eb5fbadad18da23c7c44bbe1f857e25b733b7");
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-        Assert.assertEquals(httpResponse.getCode(),204);
-
+        DeleteCommentMethod deleteCommentMethod = new DeleteCommentMethod();
+        int responseCode = deleteCommentMethod.callAPI();
+        Assert.assertEquals(responseCode,204);
     }
 }
